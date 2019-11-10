@@ -8,9 +8,11 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.lky:entity:1.0-SNAPSHOT" />
-          <element id="library" level="project" name="Maven: com.lky:dao:1.0-SNAPSHOT" />
-          <element id="library" level="project" name="Maven: com.lky:enums:1.0-SNAPSHOT" />
+          <element id="archive" name="dao-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="dao" />
+          </element>
           <element id="library" level="project" name="Maven: com.lky:commons:1.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: com.lky:enums:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: com.lky:image:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: com.lky:pay:1.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: com.github.axet:kaptcha:0.0.9" />
