@@ -1,0 +1,18 @@
+{
+  "店铺审核": "sys:applyRecord:list",
+  "行业管理": "sys:industry:list",
+  "类目管理": "sys:category:list",
+  "商品审核": "sys:product:list",
+  "高级管理": "sys:high:config",
+  "资讯管理": "sys:information:list",
+  "帮助中心": "sys:help:center:list",
+  "商城设置": "sys:base:config",
+  "提现管理": "sys:withdraw:list",
+  "用户管理": "sys:app:user:list",
+  "子帐号": "sys:account:list",
+  "权限组管理": "sys:role:list",
+  "代理商管理": "sys:agent:list",
+  "财务审核": "sys:change:wpoint:list",
+  "财务管理": "sys:financial:list"
+}
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+        <title>GNCFS下载</title>
+        <!-- <link rel="stylesheet" href="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css"> -->
+        <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+        <!-- <script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+        <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+
+        <div data-role="page" id="pageSuccess">
+                <div style="text-align: center;">
+                        <div class="download">
+                                <img src="./images/show.png" style="height: 460px;width: auto" />
+                                <div class="info">
+                                        <img src="./images/logo.png" style="height: auto;width: 160px">
+
+                                        <div style="padding: 0 40px">
+                                                <div id="ios">
+                                                        <a id="downIos" name="downIos" type="button" target="_blank" style="text-decoration: none;" class="btn-download">
+                                                                <img style="width: 25px;height: 30px" src="./images/ios_logo.png">
+                                                                <span style="padding-left: 10px;color: #e3325c">IOS版本下载</span>
+                                                        </a>
+                                                        <div style="font-size:10px;color:#e3325c">如果没有开始下载，请手动点击下载</div>
+                                                </div>
+
+                                                <div id="android">
+                                                        <a id="downAndroid" name="downAndroid" type="button" style="text-decoration: none;" class="btn-download" target="_blank">
+                                                                <img style="width: 25px;height: 30px" src="./images/android_logo.png">
+                                                                <span style="padding-left: 10px;color: #e3325c">Android版本下载</span>
+                                                        </a>
+                                                        <div style="font-size:10px;color:#e3325c">如果无法下载，请点击右上角-在浏览器中打开</div>
+                                                </div>
+
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+        </div>
+        <script>
+                $().ready(function () {
+                        getDownloadUrl();
+                        if (versions().android) {
+                                $("#ios").hide(0);
+                        } else {
+                                $("#android").hide(0);
+                        }
+                        //获取下载链接
+                        function getDownloadUrl() {
+                                $.ajax({
+                                        type: "get",
+                                        url: "/api/version/url",
+                                        dataType: "json",//回调函数接收数据的数据格式
+                                        success: function (res) {
+                                                if (res.code.toString() == '200') {
+                                                        $("#downIos").attr("href", res.data.iosUrl);
+                                                        $("#downAndroid").attr("href", res.data.androidUrl);
+                                                        if (versions().android) {
+                                                                location.href = res.data.androidUrl;
+                                                        } else {
+                                                                location.href = res.data.iosUrl;
+                                                        }
+                                                }
+                                        },
+                                        error: function (msg) {
+                                                console.log(msg);
+                                        }
+                                });
+                        }
+
+                        function versions() {
+                                var u = navigator.userAgent;
+                                return { //移动终端浏览器版本信息  
+                                        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器  
+                                        iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器  
+                                };
+                        }
+                })
+        </script>
+</body>
+
+</html>

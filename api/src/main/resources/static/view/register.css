@@ -1,0 +1,110 @@
+.ui-page-theme-a .ui-bar-inherit {
+    background-color: white;
+    border-color: #f6f6f6;
+    color: #4a4a4a;
+    text-shadow: 0 1px 0 #eee;
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.ui-page-theme-a {
+    background-color: white;
+}
+
+.ui-input-text {
+    box-shadow: none;
+}
+
+.ui-input-text input {
+    line-height: 27px;
+}
+
+.btn-code {
+    width: 95px;
+}
+
+.code-group {
+    display: flex;
+    align-items: center;
+}
+
+.ui-page-theme-a .ui-shadow {
+    background-image: linear-gradient(90deg, #FD7353 0%, #E3335C 100%);
+    border-radius: 8px;
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-code .ui-shadow {
+    background: #E3335C;
+    font-size: 12px;
+    text-shadow: none;
+}
+
+.code-img {
+    width: 128px;
+    height: auto;
+}
+
+.ui-page-theme-a .ui-btn:focus {
+    box-shadow: 0 0 12px #E3335C;
+}
+
+.btn-code .ui-btn:hover {
+    background: #E3335C;
+    color: #FFFFFF;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+.ui-checkbox input {
+    margin: -11px 0 0 3px;
+}
+
+.ui-page-theme-a a {
+    color: red;
+    text-decoration-color: red;
+}
+
+.ui-page-theme-a a:visited {
+    color: red;
+    text-decoration-color: red;
+}
+
+.download {
+    background: #e3325c url("./images/bg.png");
+    background-size: cover;
+    padding: 60px 0 0;
+    position: relative;
+}
+
+.info {
+    position: absolute;
+    width: 100%;
+    bottom: -60px;
+    background: url(./images/bg_2.png);
+    background-size: 101% auto;
+    padding-top: 120px;
+    background-repeat: no-repeat;
+}
+
+.btn-download {
+    background: white;
+    color: #e3325c;
+    border: 1px solid #e3325c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 10%;
+    padding: 10px 0;
+    border-radius: 8px;
+}
+
+.wheel-item {
+    font-size: 13px;
+}

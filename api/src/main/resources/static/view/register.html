@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+        <title>GNC用户注册</title>
+        <link rel="stylesheet" href="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.css">
+        <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+        <script src="https://apps.bdimg.com/libs/jquerymobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+        <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+        <script src="picker.min.js"></script>
+        <script src="register.min.js"></script>
+        <link rel="stylesheet" href="register.css">
+</head>
+
+<body>
+
+        <div data-role="page" id="pageRegister">
+
+                <div data-role="header">
+                        <h1 style="font-weight: 500">GNC用户注册</h1>
+                </div>
+
+                <div data-role="main" class="ui-content">
+                        <form method="post" id="user_reg" action="">
+
+                                <div>
+                                        <label for="cellphone">手机号:</label>
+
+                                        <input type="text" placeholder="请输入手机号" maxlength="11" name="cellphone" id="cellphone">
+                                </div>
+                                <div>
+                                        <label for="icode">图形验证码:</label>
+                                        <div class="code-group">
+                                                <div style="flex: auto;padding-right: 10px">
+                                                        <input type="text" maxlength="6" placeholder="请输入图形验证码"
+                                                               name="icode" id="icode">
+                                                </div>
+                                                <div id="btnCodeDiv" style="width: 130px">
+                                                        <img id="icodeImage" class="code-img" src="/api/captcha.jpg"/>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div>
+                                        <label for="code">短信验证码:</label>
+                                        <div class="code-group">
+                                                <div style="flex: auto;padding-right: 10px">
+                                                        <input type="text" maxlength="6" placeholder="请输入短信验证码" name="code" id="code">
+                                                </div>
+                                                <div id="btnCodeDiv" class="btn-code">
+                                                        <button id="btnCode" name="btnCode" type="button">
+                                                                获取验证码
+                                                        </button>
+                                                </div>
+                                        </div>
+
+                                </div>
+
+                                <div>
+                                        <label for="password">登录密码:</label>
+
+                                        <input type="password" maxlength="32" pattern="^[a-zA-z0-9]{8,32}$" placeholder="请输入登录密码" name="password" id="password">
+                                </div>
+
+                                <div>
+                                        <label for="RPassword">重复密码:</label>
+
+                                        <input type="password" maxlength="32" placeholder="再输一次密码" name="RPassword" id="RPassword">
+                                </div>
+
+
+                                <div id="address" name="address">
+                                        <label for="citySel">所属地区</label>
+
+                                        <input id="citySel" type="text" name="citySel" readonly placeholder="请选择地区" required>
+                                </div>
+
+                                <div>
+                                        <label for="recommend">推荐码:</label>
+
+                                        <input type="text" name="recommend" id="recommend" disabled>
+                                </div>
+
+
+                                <!--<div>-->
+                                <!--<label for="agreement" style="border: none;background-color: transparent;">同意《用户协议》</label>-->
+                                <!--<input type="checkbox" name="agreement" id="agreement" value="1">-->
+                                <!--</div>-->
+                                <div style="margin: 10px 10%;">
+                                        <input class="submit" type="submit" value="注册" />
+                                </div>
+                                <a type="button" style="text-decoration: none;" class="btn-download" target="_blank" href="download.html">
+                                        直接下载APP
+                                </a>
+                                <div style="text-align: center;font-size: 12px;">注册即表示同意
+                                        <a href="#pageUserProtocol">【GNC商城服务协议】</a>
+                                </div>
+                        </form>
+                </div>
+
+                <!--注册成功后弹出的提示窗口-->
+                <!--<div data-role="popup" id="user_reg_success" class="ui-content" data-overlay-theme="b">-->
+                <!--<a href="#" data-rel="back"-->
+                <!--class="ui-btn ui-corner-all ui-shadow ui-btn ui-icon-delete ui-btn-icon-notext ui-btn-right">关闭</a>-->
+                <!--<p align="center" style="color:#FF0004">注册成功!</p>-->
+                <!--<a href="gncapp://" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-home ui-btn-icon-left"-->
+                <!--data-rel="button">登录</a>-->
+                <!--<a href="#pageSuccess" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-icon-back ui-btn-icon-left"-->
+                <!--data-role="button" data-rel="back">返回</a>-->
+                <!--</div>-->
+                <div data-role="popup" id="user_reg_err" class="ui-content" data-overlay-theme="b">
+                        <p align="center" id="error_info" style="color:#FF0004"></p>
+                </div>
+        </div>
+
+        <!-- <div data-role="page" id="pageSuccess">
+                <div style="text-align: center;">
+                        <div class="download">
+                                <img src="./images/show.png" style="height: 460px;width: auto" />
+                                <div class="info">
+                                        <img src="./images/logo.png" style="height: auto;width: 160px">
+
+                                        <div style="padding: 0 40px">
+                                                <div>
+                                                        <a id="downIos" name="downIos" type="button" target="_blank" style="text-decoration: none;" class="btn-download">
+                                                                <img style="width: 25px;height: 30px" src="./images/ios_logo.png">
+                                                                <span style="padding-left: 10px;color: #e3325c">IOS版本下载</span>
+                                                        </a>
+                                                </div>
+
+                                                <div>
+                                                        <a id="downAndroid" name="downAndroid" type="button" style="text-decoration: none;" class="btn-download" target="_blank">
+                                                                <img style="width: 25px;height: 30px" src="./images/android_logo.png">
+                                                                <span style="padding-left: 10px;color: #e3325c">Android版本下载</span>
+                                                        </a>
+                                                        <div style="font-size:10px;color:#e3325c">如果无法下载，请点击右上角-在浏览器中打开</div>
+                                                </div>
+
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+
+        </div> -->
+
+        <div data-role="page" id="pageUserProtocol">
+                <div style="padding: 0 10px">
+                        <p style="white-space: normal; text-align: center; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 19px; line-height: 28.5px; font-family: 宋体;">GNCFS（全球新消费）平台服务协议</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; text-align: right; line-height: 24px;">
+                                <strong>
+                                        <span style="line-height: 24px; font-family: 宋体;">版本生效日期：2017.12.08</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">《GNCFS平台服务协议》（以下简称“本协议”）由您与GNCFS（全球新消费）平台共同缔结，本协议具有合同效力。</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">为了您能使用GNCFS（全球新消费）平台（以下简称GNC平台）提供的服务，您应当阅读并遵守本协议。请您务必审慎阅读、充分理解各条款内容，特别是免除或限制责任的条款，以及开通或使用某项服务的单独协议。</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">除非您已阅读并接受本协议所有条款，否则您无权使用GNC平台提供的服务。您使用GNC平台服务即视为您已阅读并同意上述协议的条款。如果您未满18周岁，请在法定监护人的陪同下阅读本协议，并特别注意未成年人使用条款。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">一、本协议的订立</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议由GNC平台与您共同缔结，具有合同效力。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您一经阅读并勾选“【同意】”后，使用GNC平台许可认证的账户登陆GNC平台，即表明您与GNC平台已签订本协议并自愿受本协议约束。</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">阅读本协议的过程中，如果您不同意本协议或其中任何条款约定，您应立即停止注册程序。</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">如您申请成为</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: windowtext;">联盟商家、省、市、区（县）代理或使用其他增值服务等，</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">您还需要与GNC平台或其他服务方另行签订相关协议（包括在线签订或线下签订），并遵守该协议的约定。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议指本协议正文、GNC平台的规则及其修订版本，以及其他GNC平台所列明的所有规则性文件、通知或其他内容。上述内容一经正式发布，即为本协议不可分割的组成部分，您同样应当遵守。您对前述任何协议、规则的接受，即视为您对本协议全部的接受。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议各条的标题仅为方便阅读而设，无意成为本协议的一部分，也不影响本协议的含义或解释；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">二、定义和解释</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台：指由GNC平台提供技术支持和服务的电子商务平台，包括但不限于本网站以及GNC平台提供技术服务或运营的移动端交易平台。随着GNC平台服务范围或服务项目的变更，GNC平台将会在平台规则或公告中对GNC平台的服务范围或域名调整予以声明；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台是一个开放性平台：为联盟商家提供线上商城、线下店铺服务和管理，使用联盟商家权限，并与GNC创富会员达成交易意向的特定网络空间；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）平台规则：指在各GNC平台上已经发布或将来可能发布的各种规范性文件，包括但不限于细则、规范、政策、通知等规范性文件；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）平台服务：指GNC平台为用户提供的网络空间、技术支持、相关的软件服务、系统维护，以及为用户提供的各项附属功能、增值服务等。包括商品发布、浏览、信息交流、商品交易等服务，具体服务内容及功能以GNC平台在各个平台上提供的具体服务内容为准；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户：指使用、接受
+                                        <span style="color: red;">GNC</span>平台服务的自然人、法人或其他组织，本协议中又称“您”；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">6</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）白积分：白积分是GNC平台
+                                        <span style="color: red;">对</span>用户在平台注册，在线上商城、线下商铺消费，以及参加平台活动获得的积分
+                                        <span style="color: red;">激励</span>。每100白积分，等值于1元人民币分配权。白积分每日以一定比例的速度转换为红积分和余额。白积分转换为红积分和余额的比例高低由GNC平台的线上商城、线下商铺的消费总额来决定，并且统由GNC平台独立开发的软件技术根据该消费总额自动生成；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">7</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）红积分：由您获得的白积分（即消费激励）转换而来且可以随时兑换为现实购买力的数值表示。每100红积分等于1元人民币消费权，红积分可在商城消费。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">8</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）余额：是由白积分转换而来的您可以自由支配的人民币现金价值，您可以在GNC平台上将它提取为人民币现金。用余额提取人民现金时，需要支付相关机构3%的提现手续费；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">9</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）联盟商家：指在GNC线上平台、线下商铺出售和提供商品及自愿为GNC创富会员让利的经济组织，包括通过工商行政管理部门注册登记、满足GNC平台审核条件并通过GNC平台审核的个体经营者；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">10</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）商品：包括产品或服务；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">11</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）账户（或称“GNC平台账户”）：指用户经GNC平台注册后，可用来登陆GNC平台的一个合法的服务账户（该账户形式可以是在GNC平台注册所获得的GNC平台账户、手机号、电子邮箱及GNC平台支持的其他形式账户，具体哪种形式账户可以登陆GNC平台，以GNC平台公布为准）；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">12</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）互联网支付服务：指拥有互联网支付合法资质的第三方支付机构为用户完成交易、转移资金提供的支付服务，详情见该第三方支付机构通过用户与其签订的约定，及其所提供支付服务的协议、公司网站、电子邮件或其他形式所公布的相关规则及说明；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">13</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）虚假交易：指用户在GNC平台通过不正当方式提高账户的白积分数量、影响GNC平台每日白积分流转为红积分和余额的比例及妨碍GNC平台用户的权益等；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">14</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）关联公司：本协议中“一方的关联公司”是指由一方直接控制或间接控制；或直接或间接控制一方；或与一方共同控制同一家公司或能对其施加重大影响；或与一方受同一家公司直接或间接控制的公司。包括但不限于一方的母公司、子公司；与一方受同一母公司控制的子公司；一方的合营企业、联营企业等。“控制”是指直接或间接地拥有影响所提及公司管理的能力，无论是通过所有权、股权、合同或其他被人民法院认定的方式；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">15</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">）平台方：指独立开发GNC平台软件技术系统、全面负责GNC平台运营并对GNC平台的软件技术系统及其储存的所有数据、信息、用户资料的全部知识产权、物业的物权、现金和商品的所有权以及经营权拥有全部权利的投资主体——贵州金兰兄弟信息科技有限公司。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">三、协议的生效与变更</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台有权在必要时修改本协议条款并会在修改生效前以公告的形式向您告知。您可以在GNC平台的相关服务页面查阅最新版本的协议条款；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）协议条款变更后，如果您继续使用GNC平台提供的服务，即视为您已接受修改后的协议。如果您不接受修改后的协议，应终止本协议，并停止使用GNC平台提供的服务。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">四、注册用户和账户；</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户使用GNC平台服务应具备完全民事行为能力；用户若不具备前述资格，则用户的监护人应承担因此而导致的一切后果，且GNC平台有权注销或永久冻结用户的账户；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户使用GNC平台服务，必须拥有一个经GNC平台认可的、</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">合法的、服务于用户的账户</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">；用户对前述账户的申请、使用等行为应符合本协议，及注册该账户时对应的第三方账户所提供签订的注册协议、服务协议以及其他有关规则。用户应自行确保上述账户及其密码的安全，并对上述账户及其密码所进行的一切行为负完全责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您设置的用户名不得违反国家法律法规，否则GNC平台可回收您的用户名；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）若您的行为违反本协议的相关规定，您的用户资格和账户可能被注销、暂时冻结或永久冻结；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）如用户申请成为</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">创富会员、联盟商家，应依据GNC平台所实时公布的认证流程（包括签订相应协议）完成相应认证；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">五、用户信息收集、使用和保护</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户在使用GNC平台服务时需要根据要求披露一些信息，包括但不限于根据第三方支付机构的要求，为享受互联网支付服务而需要提供的一些必要信息。这些信息包括但不限于：真实姓名或名称、联系地址、邮箱和联系电话等。您应保证这些信息在提供时是真实、准确、有效且完整的，且应及时根据实际情况或者GNC平台的要求更新这些信息。由于信息披露不完整、不真实或者信息更新不及时导致您在享受平台服务时受到限制或损失的，应由您独立承担责任。除了必要信息外，您也有权自行决定披露一些其他信息。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您授权GNC平台收集您的用户信息，这些信息可能包括注册信息、认证所需的个人身份信息或企业主体资质信息、产品信息和交易信息以及您的地理位置等，GNC平台对用户信息的收集将遵循相关法律的规定。您同时授权GNC平台在法律许可的范围内免费使用除您的个人身份信息以外的其他信息，使GNC平台有权（全部或部分地）使用、复制、修订、改写、发布、翻译、发布、执行和展示您所公示于GNC平台的各类信息或制作其派生作品，或以现在已知或日后开发的任何形式、媒体或技术，将上述您所公示的各类信息纳入其他作品内。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台将采取适当措施，根据相关法律的要求，对用户信息提供充分的信息安全保障。用户应妥善保管、使用其用户信息，包括账户号码及其密码、与交易有关的支付账户及密码、联系方式、地址等信息，因上述信息泄露而导致您的任何损失，包括使用GNC平台上的任何第三方应用软件造成信息泄露而导致您的任何损失，由您独立承担责任。如您泄露上述任何信息，您还应及时将泄露的情况以有效方式立即通知GNC平台，以便GNC平台在合理时间内采取措施防止损失继续扩大。但GNC平台对采取措施前已经产生的后果不承担任何责任。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台保证不对外公开或向任何第三方提供您的个人信息，但是存在下列情形之一的除外。</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">公开或提供相关信息之前获得您许可的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">根据法律或政策的规定而公开或提供的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">只有公开或提供您的个人信息，才能提供您需要的商品的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">只有公开或提供您的个人信息，才能提供您需要的服务的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">根据国家权力机关要求公开或提供的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑥　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">根据本协议其他条款约定而公开或提供的。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）为了向您提供更优质的GNC平台服务，提升购物体验，您同意GNC平台可将您的个人信息提供给GNC平台的关联公司；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">6</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您理解并认同，在平台方发生重组、解散、破产清算、并购等情况时，平台方可能会向第三方出售或转让GNC平台。在该等交易中，作为GNC平台不可分割的一部分，您的用户信息也可能将被转让给该第三方，以使该第三方可以继续为您提供服务；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">六、订单</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）在您下订单时，请您仔细确认所购商品的名称、价格、数量、型号、规格、尺寸、</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">产地</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">、联系地址、电话、收货人等信息。收货人与用户本人不一致的，收货人的行为和意思表示视为用户的行为和意思表示，用户应对收货人的行为及意思表示的法律后果承担连带责任。除法律另有强制性规定外，双方约定如下：本站上联盟商家展示的商品和价格等信息仅仅是要约邀请，您下单时须填写您需要购买的商品数量、价款、规格及支付方式、收货人、联系方式、收货地址（合同履行地点）、合同履行方式等内容；系统生成的订单信息是计算机信息系统根据您填写的内容自动生成的数据，仅是您向销售方发出的合同要约；联盟商家收到您的订单信息后，只有在联盟商家将您在订单中订购的商品实际向您发出时（以系统显示为“配送中”为标志），方视为您与联盟商家之间就实际向您发出的商品建立了合同关系；如果您在一份订单里订购了多种商品并且联盟商家只给您发出了部分商品时，您与联盟商家间仅就实际向您发出的商品建立了合同关系；只有在联盟商家实际向您发出的订单中订购了其他商品时，您和销售方之间就订单中已实际向您发出的该其他商品才成立合同关系。您可以随时登录您在本站注册的账户，查询您的订单状态；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）由于市场变化及各种以合理商业努力难以控制的因素的影响，本站无法保证您提交的订单信息中希望购买的商品都会有货；如您拟购买的商品，发生缺货，您有权取消订单；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">七、配送</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）为保证您的购物体验，部分商品是由</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">向您提供送货服务。在此情况下，为您提供送货服务的一方将向您收取一定的服务费用，具体金额以您下单时系统显示的费用为准，您知悉并授权</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">指定的机构代您向联盟商家取货并将商品送到您所指定的收货地址；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）由于部分商品是由联盟商家向您提供送货服务，在此情况下，送货服务相关标准按该联盟商家在</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">公示的标准执行（包括但不限于费用标准、送货时限等）；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）所有在</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">上列出的送货时间为参考时间，参考时间的计算是根据库存状况、正常的处理过程、送货时间及送货地点估计得出的，具体送达时间以实际为准。因如下列情况造成订单延迟或无法配送等，</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">及联盟商家不承担延迟配送的责任：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户提供的信息错误、地址不详细等原因导致的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">货物送达后无人签收，导致无法配送或延迟配送的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">不可抗力因素导致的，例如：自然灾害、交通戒严、交通管制、突发战争等；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">八、用户行为规范</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）遵守法律法规、社会公德及本协议：您在GNC平台的所有行为应遵守国家法律、法规、规范性文件的规定（如联盟商家从海外进口商品的，还应遵守国家海关、检验检疫、外汇管理等进出口相关法律规定）及本协议的规定和要求，不违背社会公德，不损害国家或者任何第三人的任何合法权益。否则，产生的一切法律后果均由您独立承担，并应确保GNC平台免于承担任何责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）遵守GNC平台规则及相应流程要求：您在GNC平台中的所有行为应遵守GNC平台所实时公布的平台规则；如您需要开通、申请或使用GNC平台所公示提供的不同服务或为取得该种服务的相应资格（包括但不限于成为联盟商家、店铺服务、营销推广、物流及配送服务等），您应依据GNC平台所公示的相应具体规则及流程要求完成相应资格的认证与申请，提供开通相应服务所必须的相关资料和信息，并保证该信息的真实和准确；您应与GNC平台或提供该具体服务的相应主体签订协议（如需要），并严格履行该等协议；您使用该等服务的具体内容以相应协议约定及平台规则规定为准；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您在使用GNC平台服务中的所有行为应遵守诚信原则，不得实施以下任一行为：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">发布假冒、伪劣或侵犯任何第三方合法权利的商品信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">发送钓鱼链接给其他用户；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过发送病毒、木马等行为攻击其它用户的账户或机器；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">冒充GNC平台工作人员欺骗其他用户；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过虚假交易等形式从GNC平台获得营销资源、款项支持等利益；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑥　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">连续两次以上购买商品下单后无正当理由拒不收货；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑦　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">违反银行卡管理规则实施套现；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑧　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过留言、评价等手段发送违规或垃圾信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑨　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">协助他人获取不正当利益；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑩　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">平台规则规定的其他不当行为；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）不当评价：您不得以虚构或歪曲事实的方式不当评价其他用户，不得以不正当手段（包括虚假交易、互换好评等手段）提高或降低自身或其他用户的信用度；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）不发布违法信息：您不得发布国家法律法规、本协议及其平台规则所禁止发布的商品信息，也不得发布任何涉嫌侵犯他人知识产权等合法权益的商品信息；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">6</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">不危害平台正常交易的安全措施</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">：您不得以任何方式危害GNC平台的正常交易，包括不得实施如下任一行为：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">以任何机器人软件、蜘蛛软件、爬虫软件、刷屏软件等非GNC平台认可的方式访问或登录GNC平台；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过任何方式对GNC平台造成或可能造成不合理或不合比例的重大负荷；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过任何方式干扰或试图干扰GNC平台的正常运行；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">7</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）同意接收广告、营销信息：您同意接收来自GNC平台的信息，包括但不限于营销活动信息、商品交易信息、促销信息等。为使您及时了解丰富的商品信息，提升服务体验，GNC平台或其合作的第三方可以在法律法规允许的范围内，通过短信、电话、邮件等各种方式向您提供前述信息；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">8</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）费用承担条款</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">您应自行承担因交易产生的相关费用，并依法纳税。您应自行配备上网的所需设备，包括个人电脑、调制解调器或其它必备上网装置，并自行负担个人上网所支付的与此服务有关的电话费用、网络费用；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">平台的部分服务是以收费方式提供的，如您使用收费服务，请遵守GNC平台服务相关的规则。GNC平台可能根据实际需要对收费服务的收费标准、方式进行修改，GNC平台也可能会对部分免费服务开始收费。前述修改或开始收费前，GNC平台将在相应服务页面进行通知或公告。如果您不同意上述修改或收费内容，则应立即停止使用该服务；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">9）</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">享受GNC平台服务：您享受GNC平台服务时，应遵守法律法规及本协议约定，该服务内容可能包括在GNC平台上发布、浏览、查询商品信息、进行商品交易、发表评价（具体以实物拍照为准）等；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; background: aqua;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">九、GNC平台各方的权利和义务</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台有义务在现有技术水平条件下，努力使整个GNC平台正常运行，尽力避免GNC平台服务中断或将中断时间限制在最短时间内，以保证用户正常使用服务；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您充分知悉和理解，因网上交易平台的特殊性，GNC平台没有义务对所有用户使用GNC平台服务的过程及行为进行事前及实时审查。但用户发生以下情形之一的，GNC平台可以依据普通的、非专业人员的知识水平或根据自己掌握的信息进行独立判断，GNC平台有权采取包括但不限于限制用户登录、要求用户提供有关资料、发出警告通知、删除相关信息、中止或终止向用户提供GNC平台服务、以网络公告等形式公布用户违法违约行为或依据平台规则对于违约用户进行其他的违规处理：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户违反国家法律、法规、规章及规范性文件的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户违反本协议或任何平台规则的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">第三方向GNC平台告知用户侵犯第三方合法权益的。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户不得发布下列任何信息，否则，GNC平台可在不通知用户的情况下对其采取删除、屏蔽、断开链接或依据平台规则对于违约用户进行其他的违规处理：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">恶意欺诈信息</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">与商品交易无关的信息</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">不以商品交易为目的的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">存在恶意评价信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">试图或已经扰乱正常交易秩序的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑥　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">违反国家法律、危害国家安全统一、社会稳定、公序良俗的信息，具有侮辱、诽谤、淫秽、暴力特征的信息，以及任何违反国家法律法规的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑦　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">侵害他人知识产权、商业秘密等合法权益的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑧　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">虚构事实、误导、欺骗他人的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑨　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">发布、传送、传播广告信息及垃圾信息；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您知悉并同意，当国家行政、司法机关主动依职权或者根据他人的投诉调查用户在GNC平台上的相关行为时，GNC平台有权予以配合，并将所掌握的信息提供给上述国家机关；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您知悉并同意，用户不得利用GNC平台实施侵犯他人知识产权及其它合法权益的行为，如GNC平台接到第三方投诉称用户侵权的，为防止侵权行为的继续扩大和及时解决纠纷，GNC平台除依本协议规定采取措施外，GNC平台还可以将</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">实施侵权的</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户的相关信息提供给投诉人；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">6</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）根据GNC平台的规则，联盟商家可以根据商品销售的折扣幅度获得GNC平台的相应奖励，创富会员可以获得与消费金额等值的白积分奖励，白积分再按每日一定比例的速率转换为红积分和余额。白积分转换为红积分的比例，完全由GNC平台的软件技术系统，根据当天全国各地的创富会员在联盟商家的消费额自动生成。所以，GNC平台对每一天的具体流转比例不作任何承诺；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">7</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台的联盟商家和创富会员均应自觉遵守本协议约定的行为规范。凡违反本协议第八条款及其他条款规定的行为规范而造成的不良后果和损失，GNC平台有权给予冻结账户的处罚；情节严重的,逐出GNC平台并追究其赔偿责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; background: aqua;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十、特别授权</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal;">
+                                <span style="font-size: 15px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; font-family: 宋体;">）</span>&nbsp;
+                                <span style="font-size: 15px; font-family: 宋体; color: red;">您完全理解并不可撤销地授权GNC商城或GNC商城授权的第三方，根据本协议及平台规则的规定，处理您在GNC商城上发生的所有交易及交易纠纷。您同意GNC商城或GNC商城授权的第三方的有关规则、要求对您在GNC商城上的行为的判断和相应的处理决定具有约束力。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台有权以任何方式通知第三方支付机构及GNC平台的任何关联公司，针对您违反本协议或平台规则的行为，对您的权益采取限制措施或给予相应违规处理，包括但不限于通知第三方支付机构，将您支付账户中的款项支付给GNC平台指定的用户或第三方，要求第三方支付机构和GNC平台的关联公司中止、终止对您提供服务，并在相应网站公示您的违约行为；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">十一、</span>
+                                </strong>
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体; color: red;">平台方和用户的声明</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您理解并同意：GNC平台会在现有技术水平和条件下尽最大努力向您提供服务，确保服务的连贯性和安全性；但GNC平台不能随时预见和防范法律、技术以及其他风险，包括但不限于不可抗力大规模的病毒、木马和黑客攻击、系统不稳定、第三方服务瑕疵、政府管制等原因可能导致服务中断、数据丢失以及其他的损失和风险；对于上述原因导致的服务中断、数据丢失所可能造成的损失，您不要求GNC平台作出补偿或赔偿。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您已充分知悉并同意：GNC平台是GNC平台为用户提供的信息交流及商品交易的电子商务平台，GNC平台仅根据本协议为用户提供GNC平台服务。在该平台上，GNC平台不是用户的代理商、雇员或雇主等经营关系人，GNC平台上的商品信息均为联盟商家发布，具体商品的出售或提供者均为联盟商家，而非GNC平台（另有特别说明由GNC平台提供或出售的除外）。因此，在GNC平台上，用户应对自身发布信息、进行商品交易的真实性、合法性、安全性独立承担责任；GNC平台不对商品质量、权利瑕疵以及买卖双方履行交易协议而产生的问题承担任何责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您同意：对GNC平台上出现的网络链接信息，您应审慎判断其真实性和可靠性，除法律明确规定外，您应对依该链接信息进行的交易负责；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您理解并同意：在使用GNC平台服务的过程中，可能会遇到不可抗力等风险因素使GNC平台服务发生中断。不可抗力是指不能预见、不能克服并不能避免且对一方或双方造成重大影响的客观事件，包括但不限于自然灾害如洪水、地震、瘟疫流行和风暴等以及社会事件如战争、动乱、政府行为等。出现上述情况时，GNC平台将努力在第一时间与相关单位配合，及时进行修复，但是由此给用户造成的损失，GNC平台将在法律允许的范围内免责；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）在法律允许的范围内，GNC平台对以下情形之一导致的服务中断或受阻不承担责任：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">受到计算机病毒、木马或其他恶意程序、黑客攻击的破坏；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户或GNC平台的电脑软件、系统、硬件和通信线路出现故障；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户操作不当；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户通过非GNC平台授权的方式使用服务；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">其他GNC平台无法控制或合理预见的情形。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">6）</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">GNC</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">平台依据本协议约定获得处理违法违规内容的权利，该权利不构成GNC平台的义务或承诺，GNC平台不能保证及时发现违法行为或进行相应处理；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十二、服务中止和终止</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议在下述情形下自然终止：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">协议方签署新协议代替本协议的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通知终止：除本协议另有约定外，缔约协议方中任一方提前30（三十）日以书面形式通知对方终止本协议。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）如发生下列任何一种情形，GNC平台有权不经通知而中断、中止或终止向用户提供的服务，且不向该用户承担任何责任：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户未按本协议提供真实信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户违反相关法律法规或本协议的规定</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">联盟商家所提供的商品存在假冒、伪劣情形，或商品侵犯任何第三方合法权利或造成人身伤害的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">按照法律规定或主管部门的要求；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户侵犯其他第三方合法权益的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑥　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">用户出现负面消息可能影响“GNC平台”及“GNC平台”商誉的；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑦　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">出于安全的原因或其他必要的情形；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）用户有责任自行备份存储在使用GNC平台服务中产生的数据和信息；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您同意：即便在本协议终止及您的服务被终止后，GNC平台仍有权：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">继续保存并使用您的用户信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 29px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">继续向您主张您在使用GNC平台服务期间因违反法律法规、本协议及平台规则而应承担的责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5）</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">对于您在GNC平台服务中止或终止之前已经上传至GNC平台的商品，因GNC平台依据本协议中止或终止向您提供GNC平台服务，而导致您无法与其他用户达成交易，或虽已达成交易但无法实际履行或无法完全履行，因而造成您损失的，GNC平台不承担责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal;">
+                                <strong>
+                                        <span style="font-size: 15px; font-family: 宋体; color: red;">十三、您使用GNC平台的软件版本，</span>
+                                </strong>
+                                <strong>
+                                        <span style="font-family: 宋体; color: red;">还应遵守以下约定：</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台可能为不同的终端设备开发不同的软件版本，您应当根据实际需要选择下载合适的版本进行安装；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）如果您从未经合法授权的第三方获取本软件或与本软件名称相同的安装程序，GNC平台将无法保证该软件能否正常使用，并对因此给您造成的任何损失不予负责；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）为了增进用户体验、完善服务内容，GNC平台将不时提供软件更新服务（该更新可能会采取软件替换、修改、功能强化、版本升级等形式）。为了改善用户体验，保证服务的安全性和功能的一致性，GNC平台有权对软件进行更新或者对软件的部分功能效果进行改变或限制；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）软件新版本发布后，旧版软件可能无法使用。GNC平台不保证旧版软件继续可用及相应的客户服务，请您随时核对并下载最新版本；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">5</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）除非法律允许或GNC平台书面许可，您不得从事下列行为：</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">删除软件及其副本上关于著作权的信息；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">对软件进行反向工程、反向汇编、反向编译或者以其他方式尝试发现软件的源代码；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">对GNC平台或其关联公司拥有知识产权的内容进行使用、出租、出借、复制、修改、链接、转载、汇编、发表、出版、建立镜像站点等；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">对软件或者软件运行过程中释放到任何终端内存中的数据、软件运行过程中客户端与服务器端的交互数据，以及软件运行所必需的系统数据，进行复制、修改、增加、删除、挂接运行或创作任何衍生作品，形式包括但不限于使用插件、外挂或非经合法授权的第三方工具/服务接入软件和相关系统；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">修改或伪造软件运行中的指令、数据，增加、删减、变动软件的功能或运行效果，或者将用于上述用途的软件、方法进行运营或向公众传播，无论上述行为是否为商业目的</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑥　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">通过非GNC平台开发、授权的第三方软件、插件、外挂、系统，使用GNC平台服务，或制作、发布、传播非GNC平台开发、授权的第三方软件、插件、外挂、系统；</span>
+                        </p>
+                        <p style="white-space: normal; text-indent: 27px; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑦　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">其他未经GNC平台明示授权的行为；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十四、知识产权</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台在提供GNC平台服务中提供的信息内容，包括但不限于网页、文字、图片、音频、视频、图表等的知识产权均归GNC平台所有，用户在使用GNC平台服务中所产生的内容的知识产权归用户或相关权利人所有；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）除另有特别声明外，GNC平台提供GNC平台服务时所依托软件的著作权、专利权及其他知识产权均归GNC平台关联公司所有；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台在提供GNC平台服务中所使用的“GNC平台”等商业标识，其著作权或商标权归GNC平台关联公司所有；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">4</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）如您通过GNC平台推出的客户端软件使用GNC平台服务，GNC平台给予您一项个人的、不可转让、非独占及非排他性的许可，您只能为正当使用GNC平台服务之目的使用该权利，不得将其用作任何目的，也不得随意复制、修改、编译或以任何其他方式处置这些权利；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十五、遵守当地法律监管</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您在使用GNC平台服务过程中应当遵守当地相关的法律法规，并尊重当地的道德和风俗习惯。如果您的行为违反了当地法律法规或道德风俗，您应当为此独立承担责任；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）您应避免因使用GNC平台服务而使GNC平台卷入政治和公共事件，否则GNC平台有权暂停或终止对您的服务；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十六、隐私政策</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）保护用户个人信息及隐私是GNC平台的一项基本原则。GNC平台严格保护您的个人信息安全。GNC平台使用各种制度、安全技术和程序等措施来保护您的个人信息不被未经授权的访问、使用或泄漏。除本协议有特殊约定，关于用户隐私保护政策详见GNC平台所公示的相关平台规则。</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十七、禁止虚假交易</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）GNC平台禁止和拒绝任何形式的虚假交易；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）任何用户采取欺骗、隐瞒、勾结、伪造等手段进行下列行为之一时，一经查实，GNC平台将删除此用户的所有白积分，并冻结此用户的账户。情节严重并有可能对任意第三方造成损害的，用户均应当以自己的名义独立承担所有法律责任，并应确保GNC平台免责：</span>
+                        </p>
+                        <p style="margin-left: 27px; white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">①　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">联盟商家利用多个马甲小号，购买自己发布的商品，利用多个帐号进行刷空单实施投机行为；</span>
+                        </p>
+                        <p style="margin-left: 27px; white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">②　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">联盟商家利用第三方炒作团伙或通过与他人协议交换购买的方式提高商品销售量；</span>
+                        </p>
+                        <p style="margin-left: 27px; white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">③　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">联盟商家通过变更商品页面信息，或大幅度修改商品价格等违规手段提高商品销量；</span>
+                        </p>
+                        <p style="margin-left: 27px; white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">④　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">消费创富会员与聪明联盟商家相互串通进行空单交易，实施投机等危害平台健康发展的行为；</span>
+                        </p>
+                        <p style="margin-left: 27px; white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">⑤　</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">联盟商家与其他公司，朋友，同学，家人等进行互买互卖；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">&nbsp;</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <strong>
+                                        <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">十八、管辖与法律适用</span>
+                                </strong>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">1</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议的成立、生效、履行、解释及纠纷解决，适用中华人民共和国大陆地区法律（不包括冲突法）；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">2</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）若您和GNC平台之间因本协议发生任何纠纷或争议，首先应友好协商解决；协商无果的，您和GNC平台均同意将纠纷或争议提交至被告所在地有管辖权的人民法院管辖；</span>
+                        </p>
+                        <p style="white-space: normal; line-height: 24px;">
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">3</span>
+                                <span style="font-size: 15px; line-height: 22.5px; font-family: 宋体;">）本协议条款无论因何种原因部分无效，其余条款仍有效，对各方具有约束力；</span>
+                        </p>
+                </div>
+        </div>
+
+</body>
+
+</html>
